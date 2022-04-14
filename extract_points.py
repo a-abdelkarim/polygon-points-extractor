@@ -1,12 +1,17 @@
 import numpy as np
 import random
-from shapely.geometry import Polygon, Point
+from shapely.geometry import Polygon, Point, mapping
 import json
+import geojson
 
 class Extractor:
     """Extract points from polygons"""
     in_file_path: str
     out_file_name: str
+    points_numbers: int
+    
+    def __str__(self):
+        return "Extractor Class"
     
     def __init__(self, in_file_path, out_file_name, points_number):
         """Constructor"""
@@ -55,13 +60,35 @@ class Extractor:
         # define json object
         if self.is_valid_feature():
             json_object = self.read_json_file()
+            points_features = []
             for f in json_object["features"]:
                 poly = Polygon(f["geometry"]["coordinates"][0])
                 points = self.random_points_within(poly)
                 print("######################")
                 print(points)
-               
+                for point in points:
+                    point_feature = json.dumps(mapping(point))
+                    point_feature = json.loads(point_feature.replace("'",'"'))
+                    # point_feature = geojson.Feature(geometry=point_feature['coordinates'])
+                    point_feature = {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": point_feature["coordinates"]
+                                }
+                    }
+                    print(point_feature)
+                    points_features.append(point_feature)
+            return points_features
         return False
+    
+    def create_featureCollection(self):
+        points_features = self.extract_points()
+        
+        featureCollection = geojson.FeatureCollection(points_features)
+        
+        print(featureCollection)
+    
             
 
 
@@ -70,7 +97,7 @@ def main():
     out_name = "out.json"
     points_number = 5
     extractor: Extractor = Extractor(file_path, out_name, points_number)
-    extractor.extract_points()
+    extractor.create_featureCollection()
 
 
 
