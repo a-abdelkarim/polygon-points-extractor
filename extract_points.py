@@ -72,6 +72,7 @@ class Extractor:
                     # point_feature = geojson.Feature(geometry=point_feature['coordinates'])
                     point_feature = {
                                 "type": "Feature",
+                                "properties": {},
                                 "geometry": {
                                     "type": "Point",
                                     "coordinates": point_feature["coordinates"]
@@ -95,7 +96,7 @@ class Extractor:
 def main():
     file_path = "E:\projects\python\scripts\extract_point\infile.json"
     out_name = "out.json"
-    points_number = 5
+    points_number = 200
     extractor: Extractor = Extractor(file_path, out_name, points_number)
     extractor.create_featureCollection()
 
@@ -104,24 +105,3 @@ def main():
     
 if __name__ == "__main__":
     main()       
-
-
-# poly = Polygon([(23.789642, 90.354714), (23.789603, 90.403000), (23.767688, 90.403597),(23.766510, 90.355448)])
-
-# def random_points_within(poly, num_points):
-#     min_x, min_y, max_x, max_y = poly.bounds
-
-#     points = []
-
-#     while len(points) < num_points:
-#         random_point = Point([random.uniform(min_x, max_x), random.uniform(min_y, max_y)])
-#         if (random_point.within(poly)):
-#             points.append(random_point)
-
-#     return points
-
-
-# points = random_points_within(poly,1000)
-
-# for p in points:
-#     print(p.x,",",p.y)
