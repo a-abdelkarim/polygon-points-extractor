@@ -94,7 +94,7 @@ class Extractor:
 
 
 def main():
-    file_path = "E:\projects\python\scripts\extract_point\infile.json"
+    file_path = "infile.json"
     out_name = "out.json"
     points_number = 200
     extractor: Extractor = Extractor(file_path, out_name, points_number)
